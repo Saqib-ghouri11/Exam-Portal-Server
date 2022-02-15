@@ -1,5 +1,6 @@
 package com.example.examserver.services;
 
+import com.example.examserver.custom.exceptions.UserAlreadyExistException;
 import com.example.examserver.entities.Role;
 import com.example.examserver.entities.User;
 import com.example.examserver.entities.UserRole;
@@ -7,6 +8,7 @@ import com.example.examserver.interfaces.services.UserServiceInterface;
 import com.example.examserver.repos.RoleRepository;
 import com.example.examserver.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,16 +20,20 @@ public class UserService implements UserServiceInterface {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(User user, Set<UserRole> userRoles) {
-        User usr=userRepository.findByUsername(user.getUsername());
+        User usr=new User();
         try {
+            usr=userRepository.findByUsername(user.getUsername());
             if(usr!=null){
-                usr=null;
-                throw new Exception("Username Already Exist");
+
+                throw new UserAlreadyExistException();
 
             }
+
             for(UserRole role:userRoles){
                 Role arole=roleRepository.findByRole(role.getRole().getRole());
                 if(arole==null){
@@ -35,10 +41,14 @@ public class UserService implements UserServiceInterface {
                 }
 
             }
+            //encrypting password
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             user.getUserRoles().addAll(userRoles);
             user.setEnabled(true);
             usr=userRepository.save(user);
-        }catch (Exception e){e.printStackTrace();}
+        }catch (Exception e){e.printStackTrace();
+
+        }
         return usr;
     }
 

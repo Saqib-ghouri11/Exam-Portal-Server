@@ -26,7 +26,7 @@ public class ExamServerApplication implements CommandLineRunner {
 //        user.setEmail("saqib@example.com");
 //        user.setEnabled(true);
 //        user.setUsername("saqibali08");
-//        user.setPassword("1234");
+//        user.setPassword("12341234");
 //        user.setProfile("saqib.png");
 //        user.setPhone("03022323223");
 //        //setting role
