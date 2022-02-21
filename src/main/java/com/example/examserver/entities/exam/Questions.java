@@ -1,9 +1,6 @@
 package com.example.examserver.entities.exam;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -26,7 +23,8 @@ public class Questions {
     private String option3;
     private String option4;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     private Quiz quiz;
+
 
 }

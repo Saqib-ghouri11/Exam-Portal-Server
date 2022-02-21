@@ -7,6 +7,7 @@ import com.example.examserver.entities.UserRole;
 import com.example.examserver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,22 +15,22 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
+@CrossOrigin("*")
 public class UserRestController {
 
     @Autowired
     UserService userService;
     @PostMapping("/post")
-    public User createUser(@RequestBody User user){
+    public ResponseEntity<?> createUser(@RequestBody User user){
 
             Set<UserRole> userRoleSet = new HashSet<UserRole>();
             Role role = new Role();
             role.setId(2L);
             role.setRole("NORMAL");
             userRoleSet.add(new UserRole(user, role));
-            User usr= userService.createUser(user, userRoleSet);
 
-        return usr;
+
+        return userService.createUser(user, userRoleSet);
     }
 
     @PutMapping("/put")

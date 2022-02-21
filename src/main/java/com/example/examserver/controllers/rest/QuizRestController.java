@@ -15,6 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/quiz")
+@CrossOrigin
 public class QuizRestController {
 
     @Autowired

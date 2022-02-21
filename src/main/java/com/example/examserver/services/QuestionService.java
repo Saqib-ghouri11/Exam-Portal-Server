@@ -28,6 +28,8 @@ public class QuestionService implements QuestionServiceInterface {
         return questionRepository.findAll();
     }
 
+
+
     @Override
     public Questions updateQuestion(Questions question) {
         Questions questions=questionRepository.findById(question.getId()).get();
@@ -36,6 +38,7 @@ public class QuestionService implements QuestionServiceInterface {
 
     @Override
     public void deleteQuestion(Long id) {
-        questionRepository.deleteById(id);
+        Questions questions=getQuestionById(id);
+        questionRepository.delete(questions);
     }
 }

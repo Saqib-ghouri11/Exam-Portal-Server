@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -25,12 +25,12 @@ public class Quiz {
     private String title;
     private boolean active;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "category_id")
+    @ManyToOne
     private Category category;
 
-    @OneToMany(mappedBy = "quiz",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "quiz")
     @JsonIgnore
-    private Set<Questions> setOfQuestions=new LinkedHashSet<>();
+    private Set<Questions> setOfQuestions=new HashSet<>();
+
 
 }

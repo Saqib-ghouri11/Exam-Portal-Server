@@ -7,11 +7,16 @@ import com.example.examserver.entities.UserRole;
 import com.example.examserver.interfaces.services.UserServiceInterface;
 import com.example.examserver.repos.RoleRepository;
 import com.example.examserver.repos.UserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -24,32 +29,45 @@ public class UserService implements UserServiceInterface {
     PasswordEncoder passwordEncoder;
 
     @Override
-    public User createUser(User user, Set<UserRole> userRoles) {
-        User usr=new User();
-        try {
-            usr=userRepository.findByUsername(user.getUsername());
-            if(usr!=null){
+    public ResponseEntity<?> createUser(User user, Set<UserRole> userRoles) {
+        ObjectMapper oMapper = new ObjectMapper();
 
+        User usr=null;
+
+        try {
+
+            if(userRepository.findByUsername(user.getUsername())==null){
+                for(UserRole role:userRoles){
+                    Role arole=roleRepository.findByRole(role.getRole().getRole());
+                    if(arole==null){
+                        roleRepository.save(role.getRole());
+                    }
+
+                }
+                //encrypting password
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+                user.getUserRoles().addAll(userRoles);
+                user.setEnabled(true);
+                usr=userRepository.save(user);
+
+
+            }else{
                 throw new UserAlreadyExistException();
 
-            }
-
-            for(UserRole role:userRoles){
-                Role arole=roleRepository.findByRole(role.getRole().getRole());
-                if(arole==null){
-                    roleRepository.save(role.getRole());
-                }
 
             }
-            //encrypting password
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            user.getUserRoles().addAll(userRoles);
-            user.setEnabled(true);
-            usr=userRepository.save(user);
-        }catch (Exception e){e.printStackTrace();
 
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+            Map map=new HashMap();
+            map.put("message",e.getMessage());
+
+            return new ResponseEntity(map, HttpStatus.BAD_REQUEST);
         }
-        return usr;
+        Map<String, Object> map = oMapper.convertValue(usr, Map.class);
+        return ResponseEntity.ok(map);
     }
 
     @Override

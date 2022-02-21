@@ -16,7 +16,7 @@ public class CategoryService implements CategoryServiceInterface {
 
     @Override
     public Category addCategory(Category category) {
-        return categoryRepository.save(category);
+        return categoryRepository.saveAndFlush(category);
     }
 
     @Override

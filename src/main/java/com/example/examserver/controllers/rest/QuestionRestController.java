@@ -1,24 +1,27 @@
 package com.example.examserver.controllers.rest;
 
 import com.example.examserver.entities.exam.Questions;
+import com.example.examserver.entities.exam.Quiz;
 import com.example.examserver.services.QuestionService;
+import com.example.examserver.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/question")
 public class QuestionRestController {
 
     @Autowired
     QuestionService questionService;
+
+    @Autowired
+    QuizService quizService;
 
     @PostMapping("/post")
     public Questions postQuestion(@RequestBody Questions questions){
@@ -33,6 +36,23 @@ public class QuestionRestController {
     @GetMapping("/")
     public List<Questions> getQuestions(){
         return questionService.getQuestions();
+    }
+
+    @GetMapping("/quiz/{id}")
+    public List<Questions> getQuestionsOfQuizById(@PathVariable("id") Long id){
+        Quiz quiz = quizService.getQuizById(id);
+       Set<Questions> questions=quiz.getSetOfQuestions();
+        List<Questions> quizQuestions=new ArrayList<>();
+        int maxLength=quiz.getNumberOfQuestions();
+        int count=0;
+        for(Questions ques:questions){
+                if(count<maxLength) {
+                    quizQuestions.add(ques);
+                }
+                count++;
+
+        }
+        return quizQuestions;
     }
 
     @PutMapping("/put")
