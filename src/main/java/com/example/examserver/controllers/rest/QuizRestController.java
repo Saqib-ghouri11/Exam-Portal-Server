@@ -37,12 +37,13 @@ public class QuizRestController {
     }
 
     @PutMapping("/put")
-    public Quiz updateQuiz(@RequestBody Quiz quiz){
-        Quiz quiz1=quizService.getQuizById(quiz.getId());
-        return quiz1!=null?quizService.updateQuiz(quiz):null;
+    public ResponseEntity<?> updateQuiz(@RequestBody Quiz quiz){
+       
+        return ResponseEntity.ok(quizService.updateQuiz(quiz)!=null?"{\"message\":\"updated\"}":"{\"message\":\"Quiz not found\"}");
     }
 
-    @DeleteMapping("/delete/{id}")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	@DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteQuizById(@PathVariable("id") Long id){
         Map map=new HashMap<>();
         try {
