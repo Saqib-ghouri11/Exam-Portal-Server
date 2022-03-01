@@ -1,10 +1,17 @@
 package com.example.examserver;
 
-import com.example.examserver.services.UserService;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.example.examserver.entities.Role;
+import com.example.examserver.entities.User;
+import com.example.examserver.entities.UserRole;
+import com.example.examserver.services.UserService;
 
 @SpringBootApplication
 public class ExamServerApplication implements CommandLineRunner {
@@ -46,7 +53,7 @@ public class ExamServerApplication implements CommandLineRunner {
 //
 //        user.getUserRoles().addAll(userRoles);
 //
-//        User usr=userService.createUser(user,userRoles);
-//        System.out.println(usr.getUsername());
+//        userService.createUser(user,userRoles);
+      
     }
 }
