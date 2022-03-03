@@ -33,7 +33,7 @@ public class QuestionService implements QuestionServiceInterface {
     @Override
     public Questions updateQuestion(Questions question) {
         Questions questions=questionRepository.findById(question.getId()).get();
-        return questions!=null?questionRepository.save(questions):null;
+        return questions!=null?questionRepository.save(question):null;
     }
 
     @Override

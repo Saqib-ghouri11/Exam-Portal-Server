@@ -11,6 +11,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
@@ -38,6 +39,7 @@ public class QuestionRestController {
         return questionService.getQuestions();
     }
 
+    //this is for user
     @GetMapping("/quiz/{id}")
     public List<Questions> getQuestionsOfQuizById(@PathVariable("id") Long id){
         Quiz quiz = quizService.getQuizById(id);
@@ -54,6 +56,16 @@ public class QuestionRestController {
         }
         return quizQuestions;
     }
+    
+    //this is for admin
+    @GetMapping("/quiz/admin/{id}")
+    public List<Questions> getAllQuestionsOfQuizById(@PathVariable("id") Long id){
+        Quiz quiz = quizService.getQuizById(id);
+       Set<Questions> questions=quiz.getSetOfQuestions();
+        List<Questions> quizQuestions=questions.stream().collect(Collectors.toList());;
+       
+        return quizQuestions;
+    }
 
     @PutMapping("/put")
     public Questions updateQuestion(@RequestBody Questions questions){
@@ -61,7 +73,8 @@ public class QuestionRestController {
         return questions1!=null?questionService.updateQuestion(questions):null;
     }
 
-    @DeleteMapping("/delete/{id}")
+    @SuppressWarnings("unchecked")
+	@DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteQuestionById(@PathVariable("id") Long id){
         Map map=new HashMap<>();
         try {
