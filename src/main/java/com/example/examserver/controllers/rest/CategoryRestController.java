@@ -54,6 +54,8 @@ public class CategoryRestController {
         }
         return ResponseEntity.ok(map);
     }
+    
+    
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler({ MethodArgumentNotValidException.class,Exception.class})

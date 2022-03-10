@@ -1,5 +1,6 @@
 package com.example.examserver.controllers.rest;
 
+import com.example.examserver.entities.exam.Category;
 import com.example.examserver.entities.exam.Quiz;
 import com.example.examserver.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,6 +56,18 @@ public class QuizRestController {
             return new ResponseEntity(map, HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.ok(map);
+    }
+    
+    
+    @GetMapping("/active")
+    public List<Quiz> getByActive() {
+    	return quizService.getQuizByActive(true);
+    }
+    @GetMapping("/active/{id}")
+    public List<Quiz> getByCategoryAndActive(@PathVariable("id") Long id) {
+    	Category category=new Category();
+    	category.setId(id);
+    	return quizService.getQuizByCategoryAndActive(category, true);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

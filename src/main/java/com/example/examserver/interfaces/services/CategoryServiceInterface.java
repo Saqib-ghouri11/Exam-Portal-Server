@@ -10,4 +10,5 @@ public interface CategoryServiceInterface {
     public List<Category> getCategories();
     public Category updateCategory(Category category);
     public void deleteCategory(Long id);
+    
 }
